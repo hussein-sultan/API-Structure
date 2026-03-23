@@ -1,0 +1,41 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Mariam Hassan",
+      "email": "mariam.hassan@example.com",
+      "passowrd": "P@ssw0rd-1",
+      "birthDate": "1994-06-12",
+      "phoneNumber": "+1-555-0123"
+    },
+    {
+      "id": "2",
+      "name": "Omar Ali",
+      "email": "omar.ali@example.com",
+      "passowrd": "P@ssw0rd-2",
+      "birthDate": "1990-11-03",
+      "phoneNumber": "+1-555-0456"
+    },
+    {
+      "id": "3",
+      "name": "Sarah Ahmed",
+      "email": "sarah.ahmed@example.com",
+      "passowrd": "P@ssw0rd-3",
+      "birthDate": "1988-02-27",
+      "phoneNumber": "+1-555-0789"
+    },
+    {
+      "id": "4",
+      "name": "Layla Ibrahim",
+      "email": "layla.ibrahim@example.com",
+      "passowrd": "P@ssw0rd-4",
+      "birthDate": "1996-09-18",
+      "phoneNumber": "+1-555-1122"
+    },
+    {
+      "name": "hussein",
+      "id": "eJrMaMwnfDY"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

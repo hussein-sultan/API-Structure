@@ -1,6 +1,6 @@
 import { ApiRequestConfig, ApiRequestError, ApiRequestInitConfig } from "@/types/api/request";
 import { failureResult, Result, successResult } from "@/types/common/result";
-import { isBodyInit } from "@/utils/api";
+import { isBodyInit } from "@/utils/request";
 
 const BASE_URL = 'http://localhost:3001'
 
@@ -34,7 +34,7 @@ export async function apiRequest<T>(endpoint: string, options: ApiRequestConfig 
                 info: await response.text()
             }, response.status)
         }
-        
+
         const data: T = await response.json()
         return successResult(data, response.status)
 

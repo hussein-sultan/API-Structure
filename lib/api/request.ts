@@ -1,40 +1,49 @@
-import {  RequestErrors, RequestOptions } from "@/types/api/request";
-import { HTTP_STATUS } from "../constants/statusCode";
+import { ApiRequestConfig, ApiRequestError, ApiRequestInitConfig } from "@/types/api/request";
+import { failureResult, Result, successResult } from "@/types/common/result";
+import { isBodyInit } from "@/utils/api";
 
 const BASE_URL = 'http://localhost:3001'
 
-export async function apiRequest<T>(endpoint: string, options: RequestOptions = {}) : Promise<T> {
-    const { method = 'GET', body, headers,revalidate, tags, ...customConfig } = options
+export async function apiRequest<T>(endpoint: string, options: ApiRequestConfig = {}): Promise<Result<T, ApiRequestError>> {
+    const { method = 'GET', body, headers, next, ...customConfig } = options
     const normalizedEndpoint = endpoint.replace(/^\/+/, "")
-    
-    const config : RequestOptions = {
-        method, 
+
+    const config: ApiRequestInitConfig = {
+        method,
         headers: {
-            'Content-Type' : 'application/json',
+            'Content-Type': 'application/json',
             ...(headers as Record<string, string>)
         },
-        next: {
-            tags, revalidate
-        },
+        next,
         ...customConfig
     }
 
-    if (body !== undefined) config.body = typeof body === 'string' ? body : JSON.stringify(body)
-    
-    try {
-        
-        const url = new URL(normalizedEndpoint, `${BASE_URL}/`).toString()
+    if (body !== undefined) {
+        config.body = isBodyInit(body) ? body : JSON.stringify(body)
+    }
 
+    try {
+
+        const url = new URL(normalizedEndpoint, `${BASE_URL}/`).toString()
         const response = await fetch(url, config)
 
-        if(response.status === HTTP_STATUS.NOT_FOUND) // come back
+        if (!response.ok) {
+            return failureResult({
+                message: `Request failed with status ${response.status}`,
+                status: response.status,
+                info: await response.text()
+            }, response.status)
+        }
         
-        if (!response.ok) console.log(response) // come back
-        
-        return await response.json() 
+        const data: T = await response.json()
+        return successResult(data, response.status)
 
-    } catch (err) {
-        const message = err instanceof Error ? err.message : "Unknown fetch error"
-        return new RequestErrors(message, 500, { cause: err }) as T
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown fetch error"
+        return failureResult({
+            message,
+            status: 500,
+            info: { cause: error }
+        }, 500)
     }
-} 
+}

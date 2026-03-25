@@ -1,17 +1,22 @@
-export interface RequestOptions extends RequestInit {
-    body?: string;
+export type NextCacheOptions = {
     tags?: string[];
-    revalidate?: number
+    revalidate?: number | false;
+};
+
+
+export interface ApiRequestInitConfig extends RequestInit {
+    next?: NextCacheOptions;
+};
+
+export type ApiRequestBody = unknown;
+export interface ApiRequestConfig extends Omit<RequestInit, "body"> {
+    body?: ApiRequestBody;
+    next?: NextCacheOptions;
 }
 
-export class RequestErrors extends Error {
-    status?: number;
-    info?: object
-
-    constructor(message: string, status: number, info: object) {
-        super(message)
-        this.status = status;
-        this.name = "Request Errors"
-        this.info = info
-    }
+export interface ApiRequestError {
+    message: string;
+    status: number;
+    info?: unknown;
 }
+

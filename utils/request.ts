@@ -11,3 +11,7 @@ export function isBodyInit(body: ApiRequestBody): body is BodyInit {
     ArrayBuffer.isView(body)
   );
 }
+
+export function normalizeEndpoint(endpoint: string): string {
+  return endpoint.replace(/^\/+/, "")
+}

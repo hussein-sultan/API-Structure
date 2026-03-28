@@ -31,10 +31,6 @@
       "passowrd": "P@ssw0rd-4",
       "birthDate": "1996-09-18",
       "phoneNumber": "+1-555-1122"
-    },
-    {
-      "name": "hussein",
-      "id": "eJrMaMwnfDY"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

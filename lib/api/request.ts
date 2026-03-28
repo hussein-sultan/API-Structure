@@ -1,12 +1,13 @@
 import { ApiRequestConfig, ApiRequestError, ApiRequestInitConfig } from "@/types/api/request";
+import { PathType } from "@/types/common";
 import { failureResult, Result, successResult } from "@/types/common/result";
-import { isBodyInit } from "@/utils/request";
+import { isBodyInit, normalizeEndpoint } from "@/utils/request";
 
 const BASE_URL = 'http://localhost:3001'
 
-export async function apiRequest<T>(endpoint: string, options: ApiRequestConfig = {}): Promise<Result<T, ApiRequestError>> {
+export async function apiRequest<T>(path: PathType, options: ApiRequestConfig = {}): Promise<Result<T, ApiRequestError>> {
     const { method = 'GET', body, headers, next, ...customConfig } = options
-    const normalizedEndpoint = endpoint.replace(/^\/+/, "")
+    const normalizedEndpoint = normalizeEndpoint(path?.endpoint ?? '')
 
     const config: ApiRequestInitConfig = {
         method,
@@ -21,10 +22,10 @@ export async function apiRequest<T>(endpoint: string, options: ApiRequestConfig 
     if (body !== undefined) {
         config.body = isBodyInit(body) ? body : JSON.stringify(body)
     }
-
     try {
 
-        const url = new URL(normalizedEndpoint, `${BASE_URL}/`).toString()
+        const url = path.url ? path.url : new URL(normalizedEndpoint, `${BASE_URL}/`).toString()
+        console.log(url)
         const response = await fetch(url, config)
 
         if (!response.ok) {

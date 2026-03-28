@@ -4,7 +4,7 @@ import { UserType } from "@/types/features/user";
 
 const ENDPOINT = "/users";
 
-const userService = new FactoryRequest<UserType>(ENDPOINT);
+const userService = new FactoryRequest<UserType>({ endpoint: ENDPOINT });
 
 export const {
   create: createUser,

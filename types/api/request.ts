@@ -20,3 +20,7 @@ export interface ApiRequestError {
     info?: unknown;
 }
 
+export type MessagesType = {
+    success?: string;
+    failure?: string;
+}
